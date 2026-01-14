@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Meteo in tempo reale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#2193b0, #6dd5ed);
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .box {
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 70%;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #meteo {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌦️ Meteo in tempo reale</h1>
+
+    <div class="box">
+        <input type="text" id="citta" placeholder="Inserisci una città">
+        <br><br>
+        <button onclick="caricaMeteo()">Cerca</button>
+
+        <div id="meteo"></div>
+    </div>
+
+    <script>
+        const API_KEY = "28a319d5da8a97fe0488bd10b1aaa1e6";
+
+        function caricaMeteo() {
+            const citta = document.getElementById("citta").value.trim();
+            if (citta === "") return;
+
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${citta}&units=metric&lang=it&appid=${API_KEY}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Errore");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("meteo").innerHTML = `
+                        <h2>${data.name}</h2>
+                        <p>🌡️ Temperatura: ${data.main.temp} °C</p>
+                        <p>☁️ Meteo: ${data.weather[0].description}</p>
+                        <p>💨 Vento: ${data.wind.speed} m/s</p>
+                        <p>🕒 Dati in tempo reale</p>
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById("meteo").innerHTML =
+                        "❌ Città non trovata o errore API";
+                });
+        }
+    </script>
+
+</body>
+</html>
+
+    </script>
+
+</body>
+</html>
